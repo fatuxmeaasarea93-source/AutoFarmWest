@@ -1,2 +1,2 @@
 loadstring(game:HttpGet('https://raw.githubusercontent.com/fatuxmeaasarea93-source/AutoFarmWest/refs/heads/main/ui.txt'))()
-loadstring(game:HttpGet('https://raw.githubusercontent.com/robloxssop/Nebula-HUB/refs/heads/main/Bizbox.lua'))()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/fatuxmeaasarea93-source/AutoFarmWest/refs/heads/main/Protected_1249616837526203.lua.txt'))()
