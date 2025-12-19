@@ -1,0 +1,125 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+local PlayerGui = player:WaitForChild("PlayerGui")
+
+local startTime = os.clock()
+local startStats = {}
+
+local ScreenGui
+local TextLabel
+
+-- =========================
+-- สร้าง GUI
+-- =========================
+local function CreateBlackScreen()
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "BlackScreenGui"
+    gui.IgnoreGuiInset = true
+    gui.ResetOnSpawn = false
+    gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+    gui.Parent = PlayerGui
+
+    local bg = Instance.new("Frame")
+    bg.Size = UDim2.fromScale(1, 1)
+    bg.BackgroundColor3 = Color3.new(0, 0, 0)
+    bg.BorderSizePixel = 0
+    bg.Parent = gui
+
+    local panel = Instance.new("Frame")
+    panel.Size = UDim2.new(0, 460, 0, 300)
+    panel.Position = UDim2.fromScale(0.5, 0.5)
+    panel.AnchorPoint = Vector2.new(0.5, 0.5)
+    panel.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    panel.Parent = bg
+
+    Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 16)
+
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Color3.fromRGB(90, 90, 90)
+    stroke.Thickness = 1.3
+    stroke.Parent = panel
+
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(1, -24, 1, -24)
+    label.Position = UDim2.new(0, 12, 0, 12)
+    label.BackgroundTransparency = 1
+    label.TextColor3 = Color3.fromRGB(240, 240, 240)
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.TextYAlignment = Enum.TextYAlignment.Top
+    label.Font = Enum.Font.Gotham
+    label.TextSize = 18
+    label.TextWrapped = true
+    label.Text = "Loading..."
+    label.Parent = panel
+
+    ScreenGui = gui
+    TextLabel = label
+end
+
+-- =========================
+-- leaderstats
+-- =========================
+local leaderstats = player:WaitForChild("leaderstats")
+
+for _, stat in pairs(leaderstats:GetChildren()) do
+    if stat:IsA("IntValue") or stat:IsA("NumberValue") then
+        startStats[stat.Name] = stat.Value
+    end
+end
+
+-- =========================
+-- อัปเดตข้อมูล
+-- =========================
+local function UpdateStats()
+    if not TextLabel then return end
+
+    local elapsed = math.floor(os.clock() - startTime)
+
+    local text = "📊 LEADERSTATS\n"
+    text ..= "⏱ Time : " .. elapsed .. " sec\n"
+    text ..= "──────────────────\n"
+
+    for _, stat in pairs(leaderstats:GetChildren()) do
+        if stat:IsA("IntValue") or stat:IsA("NumberValue") then
+            local diff = stat.Value - (startStats[stat.Name] or stat.Value)
+            text ..= "• " .. stat.Name .. " : " .. stat.Value .. " (+" .. diff .. ")\n"
+        end
+    end
+
+    TextLabel.Text = text
+end
+
+-- =========================
+-- สร้างครั้งแรก
+-- =========================
+CreateBlackScreen()
+UpdateStats()
+
+-- =========================
+-- เฝ้า GUI ถ้าหาย → สร้างใหม่
+-- =========================
+RunService.Heartbeat:Connect(function()
+    if not PlayerGui:FindFirstChild("BlackScreenGui") then
+        CreateBlackScreen()
+        UpdateStats()
+    end
+end)
+
+-- =========================
+-- อัปเดตเมื่อค่าเปลี่ยน
+-- =========================
+leaderstats.ChildAdded:Connect(UpdateStats)
+leaderstats.ChildRemoved:Connect(UpdateStats)
+
+for _, stat in pairs(leaderstats:GetChildren()) do
+    stat.Changed:Connect(UpdateStats)
+end
+
+task.spawn(function()
+    while true do
+        UpdateStats()
+        task.wait(1)
+    end
+end)
