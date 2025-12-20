@@ -10,3 +10,4 @@ a:Destroy()
 b:Destroy()
 c:Destroy()
 task.wait(.1)
+end
