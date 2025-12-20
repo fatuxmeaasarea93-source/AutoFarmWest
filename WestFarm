@@ -1,11 +1,12 @@
-local a = game:GetService("Players").LocalPlayer.PlayerGui.MenuGui
-local b = game:GetService("Players").LocalPlayer.PlayerGui.MenuButtons
-local c = game:GetService("Players").LocalPlayer.PlayerGui.HUD
 
 loadstring(game:HttpGet('https://raw.githubusercontent.com/fatuxmeaasarea93-source/AutoFarmWest/refs/heads/main/ui.txt'))()
 loadstring(game:HttpGet('https://raw.githubusercontent.com/fatuxmeaasarea93-source/AutoFarmWest/refs/heads/main/Protected_1249616837526203.lua.txt'))()
 
 while true do 
+local a = game:GetService("Players").LocalPlayer.PlayerGui.MenuGui
+local b = game:GetService("Players").LocalPlayer.PlayerGui.MenuButtons
+local c = game:GetService("Players").LocalPlayer.PlayerGui.HUD
+
 a:Destroy()
 b:Destroy()
 c:Destroy()
